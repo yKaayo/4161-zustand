@@ -1,5 +1,8 @@
+import { useChronometerStore } from "../../../store";
 import styles from "./styles.module.css";
 
 export default function Timer() {
-  return <div className={styles["cronometer-timer"]}>30</div>;
+  const chronometerMode = useChronometerStore(state => state.chronometerMode)
+
+  return <div className={styles["cronometer-timer"]}>{chronometerMode.initialTimeInSec}</div>;
 }
