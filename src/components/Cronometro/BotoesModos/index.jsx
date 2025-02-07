@@ -1,20 +1,22 @@
 import styles from "./styles.module.css";
 
 import BotaoModo from "./BotaoModo";
+import { CHRONOMETER_MODE } from "../../../store";
 
 export default function BotoesModos() {
-  const modo = {
-    id: "foco",
-    nome: "Foco",
-    frase: ["Otimize sua produtividade,", "mergulhe no que importa."],
-    tempoInicialEmSegundos: 30,
-  };
+  const modes = [
+    CHRONOMETER_MODE.FOCO,
+    CHRONOMETER_MODE.DESCANSO_CURTO,
+    CHRONOMETER_MODE.DESCANSO_LONGO,
+  ];
 
   return (
     <ul className={styles["cronometer-modes"]}>
-      <li key={modo.id}>
-        <BotaoModo modoBotao={modo}>{modo.nome}</BotaoModo>
-      </li>
+      {modes.map((mode) => (
+        <li key={mode.id}>
+          <BotaoModo modoBotao={mode}>{mode.name}</BotaoModo>
+        </li>
+      ))}
     </ul>
   );
 }
