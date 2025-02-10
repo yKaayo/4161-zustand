@@ -28,4 +28,26 @@ export const useChronometerStore = create((set) => ({
   setChronometerMode: (newMode) => {
     set({ chronometerMode: newMode, timeInSec: newMode.initialTimeInSec });
   },
+
+  intervaloId: null
+
+  startChronometer: () => {
+    const novoId = setInterval(countdown, 1000)
+
+    set({ intervaloId: novoId })
+  }
 }));
+
+function countdown() {
+  const inicialTime = CHRONOMETER_MODE.getState().initialTimeInSec
+
+  inicialTime > 0 ? decreaseTime() : resetTime()
+}
+
+function decreaseTime() {
+  useChronometerStore.setState(state => ({ initialTimeInSec: state.initialTimeInSec - 1 }))
+}
+
+function resetTime() {
+  useChronometerStore.setState(state => ({ initialTimeInSec: state.initialTimeInSec }))
+}
