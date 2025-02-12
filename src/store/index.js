@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export const CHRONOMETER_MODE = {
+export const chronometerMode = {
   FOCO: {
     id: "foco",
     name: "Foco",
@@ -22,32 +22,32 @@ export const CHRONOMETER_MODE = {
 };
 
 export const useChronometerStore = create((set) => ({
-  chronometerMode: CHRONOMETER_MODE.FOCO,
-  timeInSec: CHRONOMETER_MODE.FOCO.initialTimeInSec,
+  chronometerMode: chronometerMode.FOCO,
+  timeInSec: chronometerMode.FOCO.initialTimeInSec,
 
   setChronometerMode: (newMode) => {
     set({ chronometerMode: newMode, timeInSec: newMode.initialTimeInSec });
   },
 
-  intervaloId: null
+  intervalId: null,
 
   startChronometer: () => {
-    const novoId = setInterval(countdown, 1000)
+    const novoId = setInterval(countdown, 1000);
 
-    set({ intervaloId: novoId })
-  }
+    set({ intervalId: novoId });
+  },
 }));
 
 function countdown() {
-  const inicialTime = CHRONOMETER_MODE.getState().initialTimeInSec
-
-  inicialTime > 0 ? decreaseTime() : resetTime()
+  const { timeInSec } = useChronometerStore.getState();
+  
+  timeInSec > 0 ? decreaseTime() : resetTime();
 }
 
 function decreaseTime() {
-  useChronometerStore.setState(state => ({ initialTimeInSec: state.initialTimeInSec - 1 }))
+  useChronometerStore.setState((state) => ({ timeInSec: state.timeInSec - 1 }));
 }
 
 function resetTime() {
-  useChronometerStore.setState(state => ({ initialTimeInSec: state.initialTimeInSec }))
+  useChronometerStore.setState((state) => ({ initialTimeInSec: state.initialTimeInSec }));
 }

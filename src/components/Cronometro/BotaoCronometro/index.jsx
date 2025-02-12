@@ -1,16 +1,21 @@
 import styles from "./styles.module.css";
 import play_arrowImg from "/src/assets/imgs/play_arrow.png";
-import pauseImg from "/src/assets/imgs/pause.png";
-import audioPlaySom from "/src/assets/sons/play.wav";
-import audioPauseSom from "/src/assets/sons/pause.mp3";
-
+import pauseIcon from "/src/assets/imgs/pause.png";
+import { useChronometerStore } from "../../../store";
 
 export default function BotaoCronometro() {
+  const intervalId = useChronometerStore((state) => state.intervalId);
+  const startChronometer = useChronometerStore((state) => state.startChronometer);  
+
   return (
     <div className={styles["cronometer__primary-button-wrapper"]}>
-      <button className={styles["cronometer__primary-button"]}>
-        <img className={styles["cronometer__primary-button-icon"]} src={play_arrowImg} alt="" />
-        <span>Começar</span>
+      <button onClick={startChronometer} className={styles["cronometer__primary-button"]}>
+        <img
+          className={styles["cronometer__primary-button-icon"]}
+          src={intervalId ? pauseIcon : play_arrowImg}
+          alt=""
+        />
+        <span>{intervalId ? "Pausar" : "Começar"}</span>
       </button>
     </div>
   );
