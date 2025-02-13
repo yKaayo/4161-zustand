@@ -5,11 +5,15 @@ import { useChronometerStore } from "../../../store";
 
 export default function BotaoCronometro() {
   const intervalId = useChronometerStore((state) => state.intervalId);
-  const startChronometer = useChronometerStore((state) => state.startChronometer);  
+  const startChronometer = useChronometerStore((state) => state.startChronometer);
+  const pauseChronometer = useChronometerStore((state) => state.pauseChronometer);
 
   return (
     <div className={styles["cronometer__primary-button-wrapper"]}>
-      <button onClick={startChronometer} className={styles["cronometer__primary-button"]}>
+      <button
+        onClick={!intervalId ? startChronometer : pauseChronometer}
+        className={styles["cronometer__primary-button"]}
+      >
         <img
           className={styles["cronometer__primary-button-icon"]}
           src={intervalId ? pauseIcon : play_arrowImg}

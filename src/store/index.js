@@ -1,4 +1,11 @@
 import { create } from "zustand";
+import soundBeep from '../assets/sons/beep.mp3'
+import soundPause from '../assets/sons/pause.mp3'
+import soundPlay from '../assets/sons/play.wav'
+
+const soundCountFinish = new Audio(soundBeep)
+const soundCountPause = new Audio(soundPause)
+const soundCountPlay = new Audio(soundPlay)
 
 export const chronometerMode = {
   FOCO: {
@@ -33,15 +40,24 @@ export const useChronometerStore = create((set) => ({
 
   startChronometer: () => {
     const novoId = setInterval(countdown, 1000);
+    soundCountPlay.play()
 
     set({ intervalId: novoId });
+  },
+
+  pauseChronometer: () => {
+    set((state) => {
+      clearInterval(state.intervalId);
+      soundCountPause.play()
+      return { intervalId: null };
+    });
   },
 }));
 
 function countdown() {
-  const { timeInSec } = useChronometerStore.getState();
-  
-  timeInSec > 0 ? decreaseTime() : resetTime();
+  const { timeInSec, pauseChronometer } = useChronometerStore.getState();
+
+  timeInSec > 0 ? decreaseTime() : (pauseChronometer(), resetTime(), soundCountFinish.play());
 }
 
 function decreaseTime() {
@@ -49,5 +65,8 @@ function decreaseTime() {
 }
 
 function resetTime() {
-  useChronometerStore.setState((state) => ({ initialTimeInSec: state.initialTimeInSec }));
+  useChronometerStore.setState(
+    (state) => ({timeInSec: state.chronometerMode.initialTimeInSec}
+    ),
+  );
 }
